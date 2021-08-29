@@ -5,7 +5,7 @@ Music::Music(){
 }
 
 Music::Music(string file){
-    Open(file);
+    this->Open(file);
 }
 
 void Music::Play(int times){
@@ -32,6 +32,6 @@ bool Music::IsOpen(){
 }
 
 Music::~Music(){
-    Stop();
+    this->Stop();
     Mix_FreeMusic(this->music);
 }

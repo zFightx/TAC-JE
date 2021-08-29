@@ -7,8 +7,7 @@
 #include <iostream>
 using std::string;
 
-class Music
-{
+class Music{
     private:
         Mix_Music * music;
     public:

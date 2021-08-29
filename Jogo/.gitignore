@@ -1,0 +1,8 @@
+# Binary files
+build/
+*.exe
+*.out
+
+test_cmake/
+
+*.zip

@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "MINGW64",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/header",
+                "C:/SDL2/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "10.0.16299.0",
+            "compilerPath": "C:/TDM-GCC-32/bin/gcc.exe",
+            "cStandard": "c11",
+            "intelliSenseMode": "${default}",
+            "cppStandard": "c++11"
+        }
+    ],
+    "version": 4
+}

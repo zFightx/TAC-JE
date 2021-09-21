@@ -1,17 +1,19 @@
 #include "../../header/engine/State.h"
 #include "../../header/engine/Face.h"
 #include "../../header/engine/Sound.h"
+#include "../../header/engine/TileMap.h"
+#include "../../header/engine/TileSet.h"
 
-# define PI 3.14159265358979323846  /* pi */
+#define PI 3.14159265358979323846  /* pi */
 
 State::State(){
     this->quitRequested = false;
 
     GameObject *gameObject = new GameObject();
+
     // Instanciar Sprite aqui
     this->bg = new Sprite(*gameObject);
     this->music = Music();
-
 
     gameObject->AddComponent((Component *) this->bg);
 
@@ -35,6 +37,16 @@ void State::LoadAssets(){
     if(this->music.IsOpen()){
         this->music.Play();
     }
+
+	GameObject *gameObjectTile = new GameObject();
+	TileSet *tileSet = new TileSet(64, 64, "assets/img/tileset.png");
+	TileMap *tileMap = new TileMap(*gameObjectTile, "assets/map/tileMap.txt", tileSet);
+
+	gameObjectTile->AddComponent((Component*) tileMap );
+	gameObjectTile->box.x = 0.0;
+    gameObjectTile->box.y = 0.0;
+
+	this->objectArray.emplace_back(gameObjectTile);
 }
 
 void State::Update(float dt){

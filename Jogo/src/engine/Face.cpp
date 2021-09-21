@@ -1,5 +1,6 @@
 #include "../../header/engine/Face.h"
 #include "../../header/engine/Sound.h"
+#include "../../header/engine/Sprite.h"
 
 Face::Face(GameObject &associated) : Component(associated){
     this->hitpoints = 30;
@@ -7,16 +8,26 @@ Face::Face(GameObject &associated) : Component(associated){
 void Face::Damage(int damage){
     this->hitpoints -= damage;
 
-    if(this->hitpoints <= 0)
-        this->associated.RequestDelete();
+    if(this->hitpoints <= 0){
+        Sound *sound = (Sound *) this->associated.GetComponent("Sound");
+        if(sound != nullptr){
+            if(!sound->IsPlaying())
+                sound->Play();
+        }
 
-    Sound *sound = (Sound *) this->associated.GetComponent("Sound");
-    if(sound != nullptr){
-        sound->Play();
+        Component *sprite = this->associated.GetComponent("Sprite");
+        this->associated.RemoveComponent(sprite);
     }
 }
 void Face::Update(float dt){
-
+    if(this->hitpoints <= 0){
+        Sound *sound = (Sound *) this->associated.GetComponent("Sound");
+        if(sound != nullptr){
+            if(!sound->IsPlaying()){
+                this->associated.RequestDelete();
+            }
+        }        
+    }
 }
 void Face::Render(){
 

@@ -25,6 +25,7 @@ class Sprite : Component{
         void SetClip(int x, int y, int w, int h);
         void Update(float dt);
         void Render();
+        void Render(int x, int y);
         bool Is(string type);
         int GetWidth();
         int GetHeight();

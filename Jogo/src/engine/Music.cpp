@@ -1,4 +1,5 @@
 #include "../../header/engine/Music.h"
+#include "../../header/engine/Resources.h"
 
 Music::Music(){
     this->music = nullptr;
@@ -18,7 +19,8 @@ void Music::Stop(int msToStop){
 }
 
 void Music::Open(string file){
-    this->music = Mix_LoadMUS( file.c_str() );
+    this->music = Resources::GetMusic(file);
+    // this->music = Mix_LoadMUS( file.c_str() );
 
     if(this->music == nullptr){
         // Tratar erro de carregamento de musica
@@ -32,6 +34,5 @@ bool Music::IsOpen(){
 }
 
 Music::~Music(){
-    this->Stop();
-    Mix_FreeMusic(this->music);
+    this->Stop();    
 }

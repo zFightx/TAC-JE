@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "../../header/engine/Game.h"
+#include "../../header/engine/Resources.h"
 
 using std::cout;
 using std::string;
@@ -56,6 +57,10 @@ void Game::Run(){
         
         SDL_Delay(33);
     }
+
+    Resources::ClearImages();
+    Resources::ClearMusics();
+    Resources::ClearSounds();
 }
 
 Game &Game::GetInstance(){

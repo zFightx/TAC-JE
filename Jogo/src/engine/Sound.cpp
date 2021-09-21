@@ -1,4 +1,5 @@
 #include "../../header/engine/Sound.h"
+#include "../../header/engine/Resources.h"
 
 Sound::Sound(GameObject &associated) : Component(associated){
     this->chunk = nullptr;
@@ -13,13 +14,18 @@ void Sound::Play(int times){
         this->channel = Mix_PlayChannel(-1, this->chunk, times-1);
 }
 
+bool Sound::IsPlaying(){
+    return Mix_Playing(this->channel);
+}
+
 void Sound::Stop(){
     if(this->chunk != nullptr)
         Mix_HaltChannel(this->channel);
 }
 
 void Sound::Open(std::string file){
-    this->chunk = Mix_LoadWAV( file.c_str() );
+    this->chunk = Resources::GetSound(file);
+    // this->chunk = Mix_LoadWAV( file.c_str() );
 
     if(this->chunk == nullptr){
         // Tratar erro de carregamento de musica
@@ -34,7 +40,6 @@ bool Sound::IsOpen(){
 
 Sound::~Sound(){
     this->Stop();
-    Mix_FreeChunk(this->chunk);
 }
 
 void Sound::Update(float dt){

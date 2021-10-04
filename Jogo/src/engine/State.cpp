@@ -3,6 +3,7 @@
 #include "../../header/engine/Sound.h"
 #include "../../header/engine/TileMap.h"
 #include "../../header/engine/TileSet.h"
+#include "../../header/engine/InputManager.h"
 
 #define PI 3.14159265358979323846  /* pi */
 
@@ -50,8 +51,22 @@ void State::LoadAssets(){
 }
 
 void State::Update(float dt){
-    this->Input();
+    // this->Input();
+
+	if(InputManager::GetInstance().KeyPress(ESCAPE_KEY))
+		this->quitRequested = true;
+	
+	if(InputManager::GetInstance().QuitRequested())
+		this->quitRequested = true;
     
+	if(InputManager::GetInstance().KeyPress(SPACE_KEY)){
+		int mouseX = InputManager::GetInstance().GetMouseX();
+		int mouseY = InputManager::GetInstance().GetMouseY();
+
+		Vec2 objPos = Vec2( 200, 0 ).GetRotate( -PI + PI*(rand() % 1001)/500.0 ) + Vec2( mouseX, mouseY );
+		this->AddObject((int)objPos.x, (int)objPos.y);
+	}
+
     for(unsigned i = 0; i < this->objectArray.size(); i++)
         this->objectArray[i]->Update(dt);
 

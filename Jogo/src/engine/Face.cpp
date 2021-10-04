@@ -1,6 +1,7 @@
 #include "../../header/engine/Face.h"
 #include "../../header/engine/Sound.h"
 #include "../../header/engine/Sprite.h"
+#include "../../header/engine/InputManager.h"
 
 Face::Face(GameObject &associated) : Component(associated){
     this->hitpoints = 30;
@@ -27,6 +28,15 @@ void Face::Update(float dt){
                 this->associated.RequestDelete();
             }
         }        
+    }else{
+        if(InputManager::GetInstance().MousePress(LEFT_MOUSE_BUTTON)){
+            int mouseX = InputManager::GetInstance().GetMouseX();
+            int mouseY = InputManager::GetInstance().GetMouseY();
+
+            if(this->associated.box.IsCoordInRect( {(float)mouseX, (float)mouseY} ) ) {
+                this->Damage(std::rand() % 10 + 10);
+            }
+        }
     }
 }
 void Face::Render(){

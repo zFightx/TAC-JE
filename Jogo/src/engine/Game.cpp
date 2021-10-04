@@ -2,6 +2,7 @@
 
 #include "../../header/engine/Game.h"
 #include "../../header/engine/Resources.h"
+#include "../../header/engine/InputManager.h"
 
 using std::cout;
 using std::string;
@@ -33,6 +34,9 @@ Game::Game(string title, int width, int height){
         this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
 
         this->state = new State();
+
+        this->dt = 0.0;
+        this->frameStart = 0.0;
     }
     else
         printf("Erro: Uma segunda instancia da classe Game criada.\n");
@@ -50,7 +54,11 @@ Game::~Game(){
 
 void Game::Run(){
     while(this->state != nullptr && !this->state->QuitRequested()){
-        this->state->Update(0.3);
+        this->CalculateDeltaTime();
+
+        InputManager::GetInstance().Update();
+
+        this->state->Update(this->dt);
         this->state->Render();
 
         SDL_RenderPresent(this->renderer);
@@ -77,4 +85,15 @@ SDL_Renderer *Game::GetRenderer(){
 
 State &Game::GetState(){
     return *this->state;
+}
+
+void Game::CalculateDeltaTime(){
+    this->dt = SDL_GetTicks() - frameStart;
+    this->frameStart = SDL_GetTicks();
+
+    this->dt = this->dt / 1000;
+}
+
+float Game::GetDeltaTime(){
+    return this->dt;
 }

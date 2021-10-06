@@ -6,15 +6,15 @@
 
 class Camera{
     private:
-        GameObject *focus;
+        static GameObject *focus;
 
     public:
-        Vec2 pos;
-        Vec2 speed;
+        static Vec2 pos;
+        static Vec2 speed;
 
-        void Follow(GameObject *newFocus);
-        void Unfollow();
-        void Update(float dt);
+        static void Follow(GameObject *newFocus);
+        static void Unfollow();
+        static void Update(float dt);
 };
 
 #endif

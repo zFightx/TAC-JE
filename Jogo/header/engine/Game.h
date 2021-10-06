@@ -11,7 +11,7 @@
 #include <iostream>
 using namespace std;
 
-const string name = "Alexandre - 170098168";
+const string name = "Alexandre Souza Costa Oliveira - 170098168";
 
 class Game{
     private:

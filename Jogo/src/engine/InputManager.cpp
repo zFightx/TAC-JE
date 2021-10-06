@@ -1,4 +1,5 @@
 #include "../../header/engine/InputManager.h"
+#include "../../header/engine/Camera.h"
 
 void InputManager::Update(){
     SDL_Event event;
@@ -47,13 +48,22 @@ void InputManager::Update(){
         }
     }
 }
-bool InputManager::KeyPress(int key){
+bool InputManager::KeyPress(unsigned int key){
+    if(key >= 0x40000000 && key <= 0x4000011A)
+        key -= 0x3FFFFF81;
+
     return this->keyState[key] && this->keyUpdate[key] == this->updateCounter;
 }
-bool InputManager::KeyRelease(int key){
+bool InputManager::KeyRelease(unsigned int key){
+    if(key >= 0x40000000 && key <= 0x4000011A)
+        key -= 0x3FFFFF81;
+
     return !this->keyState[key] && this->keyUpdate[key] == this->updateCounter;
 }
-bool InputManager::IsKeyDown(int key){
+bool InputManager::IsKeyDown(unsigned int key){
+    if(key >= 0x40000000 && key <= 0x4000011A)
+        key -= 0x3FFFFF81;
+        
     return this->keyState[key];
 }
 bool InputManager::MousePress(int button){
@@ -66,10 +76,10 @@ bool InputManager::IsMouseDown(int button){
     return this->mouseState[button];
 }
 int InputManager::GetMouseX(){
-    return this->mouseX;
+    return this->mouseX + Camera::pos.x;
 }
 int InputManager::GetMouseY(){
-    return this->mouseY;
+    return this->mouseY + Camera::pos.y;
 }
 bool InputManager::QuitRequested(){
     return this->quitRequested;

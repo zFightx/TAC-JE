@@ -14,10 +14,10 @@
 class InputManager{
     private:
         bool mouseState[6];
-        int mouseUpdate[6];
+        unsigned int mouseUpdate[6];
 
         bool keyState[416];
-        int keyUpdate[416];
+        unsigned int keyUpdate[416];
 
         bool quitRequested;
         uint32_t updateCounter;
@@ -28,9 +28,9 @@ class InputManager{
     public:
         void Update();
         
-        bool KeyPress(int key);
-        bool KeyRelease(int key);
-        bool IsKeyDown(int key);
+        bool KeyPress(unsigned int key);
+        bool KeyRelease(unsigned int key);
+        bool IsKeyDown(unsigned int key);
 
         bool MousePress(int button);
         bool MouseRelease(int button);

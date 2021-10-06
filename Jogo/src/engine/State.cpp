@@ -4,6 +4,8 @@
 #include "../../header/engine/TileMap.h"
 #include "../../header/engine/TileSet.h"
 #include "../../header/engine/InputManager.h"
+#include "../../header/engine/Camera.h"
+#include "../../header/engine/CameraFollower.h"
 
 #define PI 3.14159265358979323846  /* pi */
 
@@ -16,6 +18,8 @@ State::State(){
     this->bg = new Sprite(*gameObject);
     this->music = Music();
 
+	CameraFollower *cameraFollower = new CameraFollower(*gameObject);
+	gameObject->AddComponent((Component *) cameraFollower);
     gameObject->AddComponent((Component *) this->bg);
 
     gameObject->box.x = 0.0;
@@ -53,6 +57,8 @@ void State::LoadAssets(){
 void State::Update(float dt){
     // this->Input();
 
+	Camera::Update(dt);
+
 	if(InputManager::GetInstance().KeyPress(ESCAPE_KEY))
 		this->quitRequested = true;
 	
@@ -79,8 +85,9 @@ void State::Update(float dt){
 }
 
 void State::Render(){
-    for(unsigned i = 0; i < this->objectArray.size(); i++)
+    for(unsigned i = 0; i < this->objectArray.size(); i++){
         this->objectArray[i]->Render();
+	}
 }
 
 void State::AddObject (int mouseX, int mouseY){

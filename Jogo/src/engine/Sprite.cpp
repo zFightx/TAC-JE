@@ -1,6 +1,7 @@
 #include "../../header/engine/Sprite.h"
 #include "../../header/engine/Game.h"
 #include "../../header/engine/Resources.h"
+#include "../../header/engine/Camera.h"
 
 Sprite::Sprite(GameObject &associated) : Component::Component(associated){
     this->texture = nullptr;
@@ -48,7 +49,7 @@ void Sprite::Update(float dt){
 }
 
 void Sprite::Render(){
-    this->Render(this->associated.box.x, this->associated.box.y);
+    this->Render(this->associated.box.x  - Camera::pos.x, this->associated.box.y - Camera::pos.y);
 }
 
 void Sprite::Render(int x, int y){

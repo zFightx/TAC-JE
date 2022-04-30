@@ -1,4 +1,5 @@
 #include <math.h>
+#include <cmath>
 
 #include "../../header/engine/Vec2.h"
 
@@ -47,11 +48,11 @@ Vec2 Vec2::GetNormalize(){
 }
 
 float Vec2::Magnitude(Vec2 vector){
-    const float x = sqrt( vector.x * vector.x + vector.y * vector.y );
+    const float x = sqrt( (vector.x * vector.x) + (vector.y * vector.y) );
     return x;
 }
 float Vec2::Magnitude(){
-    const float x = sqrt( this->x * this->x + this->y * this->y );
+    const float x = sqrt( (this->x * this->x) + (this->y * this->y) );
     return x;
 }
 
@@ -90,18 +91,18 @@ float Vec2::GetSlopeVectors(Vec2 vector){
 }
 
 Vec2 Vec2::GetRotate(Vec2 vector, float angle){   
-    angle = angle * 180 / PI;
+    // angle = angle * 180 / PI;
 
-    const float x = vector.x * cos(angle) - vector.y * sin(angle);
-    const float y = vector.y * cos(angle) + vector.x * sin(angle);
+    const float x = (vector.x * cosf(angle)) - (vector.y * sinf(angle));
+    const float y = (vector.y * cosf(angle)) + (vector.x * sinf(angle));
 
     return Vec2(x,y);
 }
 Vec2 Vec2::GetRotate(float angle){
-    angle = angle * 180 / PI;
-
-    const float x = this->x * cos(angle) - this->y * sin(angle);
-    const float y = this->y * cos(angle) + this->x * sin(angle);
+    // angle = angle * 180 / PI;
+    
+    const float x = (this->x * cosf(angle)) - (this->y * sinf(angle));
+    const float y = (this->y * cosf(angle)) + (this->x * sinf(angle));
 
     return Vec2(x,y);
 }
@@ -114,6 +115,10 @@ Vec2 Vec2::operator-(Vec2 vector){
     return Vec2::Subtract({this->x, this->y}, vector);
 }
 
+Vec2 Vec2::operator*(float num){
+    return Vec2(this->x*num, this->y*num);
+}
+
 void Vec2::operator+=(Vec2 vector){
     this->x += vector.x;
     this->y += vector.y;
@@ -122,4 +127,9 @@ void Vec2::operator+=(Vec2 vector){
 void Vec2::operator-=(Vec2 vector){
     this->x -= vector.x;
     this->y -= vector.y;
+}
+
+void Vec2::operator*=(float num){
+    this->x *= num;
+    this->y *= num;
 }

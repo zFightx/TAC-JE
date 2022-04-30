@@ -7,3 +7,7 @@ Component::Component(GameObject &gameObject) : associated(gameObject){
 Component::~Component(){
     
 }
+
+void Component::Start() {
+
+}

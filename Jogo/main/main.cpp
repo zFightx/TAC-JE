@@ -5,7 +5,7 @@
 int main (int argc, char** argv){
     Game &instance = Game::GetInstance();
 
-    instance.GetState().LoadAssets();
+    // instance.GetState().LoadAssets();
     instance.Run();
 
     std::cout << SDL_GetError();

@@ -3,12 +3,18 @@
 #include "../../header/engine/Resources.h"
 #include "../../header/engine/Camera.h"
 
+#include <math.h>
+
 Sprite::Sprite(GameObject &associated) : Component::Component(associated){
     this->texture = nullptr;
+    this->scale = Vec2(1.0, 1.0);
+    this->angleDeg = this->associated.angleDeg;
 }
 
 Sprite::Sprite(GameObject &associated, string file) : Component::Component(associated){
     this->texture = nullptr;
+    this->scale = Vec2(1.0, 1.0);
+    this->angleDeg = this->associated.angleDeg;
     this->Open(file);
 }
 
@@ -58,10 +64,10 @@ void Sprite::Render(int x, int y){
 
     dstrect.x = x;
     dstrect.y = y;
-    dstrect.w = this->clipRect.w;
-    dstrect.h = this->clipRect.h;
+    dstrect.w = (int) round(this->clipRect.w * this->scale.x);
+    dstrect.h = (int) round(this->clipRect.h * this->scale.y);    
 
-    SDL_RenderCopy(renderer, this->texture, &this->clipRect, &dstrect);
+    SDL_RenderCopyEx(renderer, this->texture, &this->clipRect, &dstrect, this->angleDeg, nullptr, SDL_FLIP_NONE);
 }
 
 bool Sprite::Is(string type){
@@ -69,11 +75,25 @@ bool Sprite::Is(string type){
 }
 
 int Sprite::GetWidth(){
-    return this->width;
+    return this->width*this->scale.x;
 }
 
 int Sprite::GetHeight(){
-    return this->height;
+    return this->height*this->scale.y;
+}
+
+void Sprite::SetScaleX(float scaleX, float scaleY){
+    this->scale.x = scaleX != 0.0 ? scaleX : this->scale.x;
+    this->scale.y = scaleY != 0.0 ? scaleY : this->scale.y;
+
+    this->associated.box.w = this->GetWidth();
+    this->associated.box.h = this->GetHeight();
+    this->associated.box.x -= this->associated.box.w/2;
+    this->associated.box.y -= this->associated.box.h/2;
+}
+
+Vec2 Sprite::GetScale(){
+    return this->scale;
 }
 
 bool Sprite::IsOpen(){

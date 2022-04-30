@@ -16,12 +16,12 @@ class State{
         Sprite *bg;
         Music music;        
 
+        bool started;
         bool quitRequested;
 
-        std::vector<std::unique_ptr<GameObject>> objectArray;
+        std::vector<std::shared_ptr<GameObject>> objectArray;
 
         void Input ();
-        void AddObject (int mouseX, int mouseY);
     public:
         State();
         ~State();
@@ -30,6 +30,10 @@ class State{
         void LoadAssets();
         void Update(float dt);
         void Render();
+        void Start();
+
+        std::weak_ptr<GameObject> AddObject (GameObject *go);
+        std::weak_ptr<GameObject> GetObjectPtr(GameObject *go);
 };
 
 #endif

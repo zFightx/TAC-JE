@@ -14,7 +14,7 @@ Vec2 Rect::CenterSquare(Rect square){
     return Vec2( (square.x+square.w)/2.0, (square.y+square.h)/2.0 );
 }
 Vec2 Rect::CenterSquare(){
-    return Vec2( (this->x+this->w)/2.0, (this->y+this->h)/2.0 );
+    return Vec2( (this->x+(this->w/2.0)), (this->y+(this->h/2.0)) );
 }
 
 Rect Rect::SumVec2(Rect rect, Vec2 vector){

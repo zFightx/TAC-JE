@@ -35,8 +35,10 @@ class Vec2{
 
         Vec2 operator+(Vec2 vector);
         Vec2 operator-(Vec2 vector);
+        Vec2 operator*(float num);
         void operator+=(Vec2 vector);
         void operator-=(Vec2 vector);
+        void operator*=(float num);
 };
 
 #endif

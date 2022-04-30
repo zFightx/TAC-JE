@@ -1,16 +1,18 @@
 #include "../../header/engine/State.h"
-#include "../../header/engine/Face.h"
+// #include "../../header/engine/Face.h"
 #include "../../header/engine/Sound.h"
 #include "../../header/engine/TileMap.h"
 #include "../../header/engine/TileSet.h"
 #include "../../header/engine/InputManager.h"
 #include "../../header/engine/Camera.h"
 #include "../../header/engine/CameraFollower.h"
+#include "../../header/engine/Alien.h"
 
 #define PI 3.14159265358979323846  /* pi */
 
 State::State(){
     this->quitRequested = false;
+	this->started = false;
 
     GameObject *gameObject = new GameObject();
 
@@ -25,10 +27,21 @@ State::State(){
     gameObject->box.x = 0.0;
     gameObject->box.y = 0.0;
 
-    this->objectArray.emplace_back(gameObject);
+	this->AddObject(gameObject);
+    // this->objectArray.emplace_back(gameObject);
 }
 State::~State(){
     this->objectArray.clear();
+}
+
+void State::Start(){
+	this->LoadAssets();
+
+	for(unsigned i = 0; i < this->objectArray.size(); i++){
+        this->objectArray[i]->Start();
+	}
+
+	this->started = true;
 }
 
 bool State::QuitRequested(){
@@ -51,7 +64,22 @@ void State::LoadAssets(){
 	gameObjectTile->box.x = 0.0;
     gameObjectTile->box.y = 0.0;
 
-	this->objectArray.emplace_back(gameObjectTile);
+	// this->objectArray.emplace_back(gameObjectTile);
+	this->AddObject(gameObjectTile);
+
+	// Teste de Alien
+	GameObject *alienObject = new GameObject();
+	Sprite *alienImg = new Sprite(*alienObject, "assets/img/alien.png");
+	Alien *alien = new Alien(*alienObject, 10);
+
+	alienObject->AddComponent((Component*) alienImg);
+	alienObject->AddComponent((Component*) alien);
+
+	alienObject->box.x = 512;
+    alienObject->box.y = 300;
+
+	this->AddObject(alienObject);
+	// this->objectArray.emplace_back(gameObject);
 }
 
 void State::Update(float dt){
@@ -70,7 +98,7 @@ void State::Update(float dt){
 		int mouseY = InputManager::GetInstance().GetMouseY();
 
 		Vec2 objPos = Vec2( 200, 0 ).GetRotate( -PI + PI*(rand() % 1001)/500.0 ) + Vec2( mouseX, mouseY );
-		this->AddObject((int)objPos.x, (int)objPos.y);
+		// this->AddObject((int)objPos.x, (int)objPos.y);
 	}
 
     for(unsigned i = 0; i < this->objectArray.size(); i++)
@@ -90,20 +118,23 @@ void State::Render(){
 	}
 }
 
-void State::AddObject (int mouseX, int mouseY){
-    GameObject *gameObject = new GameObject();
-    Sprite *sprite = new Sprite(*gameObject, "assets/img/penguinface.png");
-    Sound *sound = new Sound(*gameObject, "assets/audio/boom.wav");
-    Face *face = new Face(*gameObject);
+std::weak_ptr<GameObject> State::AddObject (GameObject *go){
+	std::shared_ptr<GameObject> goPointer (go);
 
-    gameObject->AddComponent((Component *) sprite);
-    gameObject->AddComponent((Component *) sound);
-    gameObject->AddComponent((Component *) face);
+	if(this->started)
+		go->Start();
 
-    gameObject->box.x = mouseX - (gameObject->box.w / 2);
-    gameObject->box.y = mouseY - (gameObject->box.h / 2);
+    this->objectArray.push_back(goPointer);
+	return std::weak_ptr<GameObject> (goPointer);
+}
 
-    this->objectArray.emplace_back(gameObject);
+std::weak_ptr<GameObject> State::GetObjectPtr(GameObject *go){
+	for(unsigned i = 0; i < this->objectArray.size(); i++){
+        if(this->objectArray[i].get() == go){
+			return std::weak_ptr<GameObject> (this->objectArray[i]);
+		}
+	}
+	return std::weak_ptr<GameObject> ();
 }
 
 void State::Input() {
@@ -135,13 +166,13 @@ void State::Input() {
 				// chamar funções de GameObjects, use objectArray[i]->função() direto.
 
 				if(go->box.IsCoordInRect( {(float)mouseX, (float)mouseY} ) ) {
-					Face *face = (Face*) go->GetComponent( "Face" );
-					if ( nullptr != face ) {
-						// Aplica dano
-						face->Damage(std::rand() % 10 + 10);
-						// Sai do loop (só queremos acertar um)
-						break;
-					}
+					// Face *face = (Face*) go->GetComponent( "Face" );
+					// if ( nullptr != face ) {
+					// 	// Aplica dano
+					// 	face->Damage(std::rand() % 10 + 10);
+					// 	// Sai do loop (só queremos acertar um)
+					// 	break;
+					// }
 				}
 			}
 		}
@@ -153,7 +184,7 @@ void State::Input() {
 			// Se não, crie um objeto
 			else {
 				Vec2 objPos = Vec2( 200, 0 ).GetRotate( -PI + PI*(rand() % 1001)/500.0 ) + Vec2( mouseX, mouseY );
-				this->AddObject((int)objPos.x, (int)objPos.y);
+				// this->AddObject((int)objPos.x, (int)objPos.y);
 			}
 		}
 	}

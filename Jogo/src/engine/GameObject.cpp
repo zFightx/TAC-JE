@@ -3,10 +3,19 @@
 
 GameObject::GameObject(){
     this->isDead = false;
+    this->started = false;
+    this->angleDeg = 0;
     
 }
 GameObject::~GameObject(){
     this->components.clear();
+}
+
+void GameObject::Start() {
+    for(unsigned i = 0; i < this->components.size(); i++)
+        this->components[i]->Start();
+    
+    this->started = true;
 }
 
 void GameObject::Update(float dt){
@@ -25,6 +34,9 @@ void GameObject::RequestDelete(){
 }
 void GameObject::AddComponent(Component *cpt){
     this->components.emplace_back(cpt);
+
+    if(this->started)
+        cpt->Start();
 }
 void GameObject::RemoveComponent(Component *cpt){
     for(unsigned i = 0; i < this->components.size(); i++){

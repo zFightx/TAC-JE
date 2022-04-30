@@ -15,8 +15,11 @@ class Sprite : Component{
         int width;
         int height;
         SDL_Rect clipRect;
+        Vec2 scale;
 
     public:
+        double angleDeg;
+        
         Sprite(GameObject &associated);
         Sprite(GameObject &associated, string file);
         ~Sprite();
@@ -29,6 +32,8 @@ class Sprite : Component{
         bool Is(string type);
         int GetWidth();
         int GetHeight();
+        void SetScaleX(float scaleX, float scaleY);
+        Vec2 GetScale();
         bool IsOpen();
 };
 

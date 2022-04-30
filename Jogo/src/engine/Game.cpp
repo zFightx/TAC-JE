@@ -53,6 +53,8 @@ Game::~Game(){
 }
 
 void Game::Run(){
+    this->state->Start();
+    
     while(this->state != nullptr && !this->state->QuitRequested()){
         this->CalculateDeltaTime();
 
@@ -69,10 +71,11 @@ void Game::Run(){
     Resources::ClearImages();
     Resources::ClearMusics();
     Resources::ClearSounds();
+
 }
 
 Game &Game::GetInstance(){
-    if(Game::instance != nullptr) 
+    if(Game::instance != nullptr)
         return *Game::instance;
     
     Game::instance = new Game(name);
